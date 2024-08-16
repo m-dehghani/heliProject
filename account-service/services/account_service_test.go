@@ -14,6 +14,8 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+var customerId = 1
+
 func setupTestDB(t *testing.T) (*gorm.DB, sqlmock.Sqlmock) {
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -49,6 +51,11 @@ func TestWithdraw(t *testing.T) {
 	mock.ExpectExec(`UPDATE "accounts" SET "balance"=\$1 WHERE "id" = \$2`).WithArgs(50.0, 1).WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectExec(`INSERT INTO "transactions" \("customer_id","type","amount","date"\) VALUES \(\$1,\$2,\$3,\$4\)`).WithArgs(1, "withdraw", 50.0, sqlmock.AnyArg()).WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
+	createAccountreq := &pb.CreateAccountRequest{Customerid: 1}
+	accRes, error := accountService.CreateAccount(context.Background(), createAccountreq)
+	//assert.Error(t, error)
+	t.Logf("account creation result: %v error: %v\n", accRes.Success, error)
+	assert.NoError(t, error)
 
 	req := &pb.WithdrawRequest{Customerid: 1, Amount: 50.0}
 	res, err := accountService.Withdraw(context.Background(), req)
@@ -70,7 +77,8 @@ func TestDeposit(t *testing.T) {
 	mock.ExpectExec(`UPDATE "accounts" SET "balance"=\$1 WHERE "id" = \$2`).WithArgs(150.0, 1).WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectExec(`INSERT INTO "transactions" \("customer_id","type","amount","date"\) VALUES \(\$1,\$2,\$3,\$4\)`).WithArgs(1, "deposit", 50.0, sqlmock.AnyArg()).WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
-
+	createAccountreq := &pb.CreateAccountRequest{Customerid: 1}
+	accountService.CreateAccount(context.Background(), createAccountreq)
 	req := &pb.DepositRequest{Customerid: 1, Amount: 50.0}
 	res, err := accountService.Deposit(context.Background(), req)
 
@@ -86,8 +94,9 @@ func TestBalanceInquiry(t *testing.T) {
 
 	accountService := NewAccountService(db)
 
-	mock.ExpectQuery(`SELECT \* FROM "accounts" WHERE customer_id = \$1`).WithArgs(1).WillReturnRows(sqlmock.NewRows([]string{"id", "customer_id", "balance"}).AddRow(1, 1, 100.0))
-
+	mock.ExpectQuery(`SELECT \* FROM "accounts" WHERE customer_id = \$1`).WithArgs(11).WillReturnRows(sqlmock.NewRows([]string{"id", "customer_id", "balance"}).AddRow(1, 1, 100.0))
+	createAccountreq := &pb.CreateAccountRequest{Customerid: 1}
+	accountService.CreateAccount(context.Background(), createAccountreq)
 	req := &pb.BalanceInquiryRequest{Customerid: 1}
 	res, err := accountService.BalanceInquiry(context.Background(), req)
 
@@ -104,7 +113,8 @@ func TestTransactionHistory(t *testing.T) {
 	accountService := NewAccountService(db)
 
 	mock.ExpectQuery(`SELECT \* FROM "transactions" WHERE customer_id = \$1`).WithArgs(1).WillReturnRows(sqlmock.NewRows([]string{"id", "customer_id", "type", "amount", "date"}).AddRow(1, 1, "deposit", 50.0, time.Now()).AddRow(2, 1, "withdraw", 30.0, time.Now()))
-
+	createAccountreq := &pb.CreateAccountRequest{Customerid: 1}
+	accountService.CreateAccount(context.Background(), createAccountreq)
 	req := &pb.TransactionHistoryRequest{Customerid: 1}
 	res, err := accountService.TransactionHistory(context.Background(), req)
 

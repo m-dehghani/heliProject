@@ -17,10 +17,11 @@ run:
 
 # Test all services
 test:
-	@for service in $(SERVICES); do \
+	for service in $(SERVICES); do \
 		echo "Testing $$service..."; \
-		docker-compose run --rm $$service go test -v ./...; \
+        docker-compose run --rm $$service go test -v ./...; \
 	done
+
 
 # Clean up
 clean:
