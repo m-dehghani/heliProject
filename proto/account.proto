@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+option go_package ="/proto";
+package account;
+
+service AccountService {
+    rpc CreateAccount (CreateAccountRequest) returns (CreateAccountResponse);
+    rpc Deposit (DepositRequest) returns (DepositResponse);
+    rpc Withdraw (WithdrawRequest) returns (WithdrawResponse);
+    rpc BalanceInquiry (BalanceInquiryRequest) returns(BalanceInquiryResponse);
+    rpc TransactionHistory (TransactionHistoryRequest) returns (TransactionHistoryResponse);
+}
+
+message CreateAccountRequest {
+    uint32 customerid = 1;
+}
+
+message CreateAccountResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message DepositRequest {
+    uint32 customerid = 1;
+    double amount = 2;
+}
+
+message DepositResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message WithdrawRequest {
+    uint32 customerid = 1;
+    double amount = 2;
+}
+
+message WithdrawResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message BalanceInquiryRequest {
+    uint32 customerid = 1;
+}
+
+message BalanceInquiryResponse {
+    double balance = 1;
+    string message = 2;
+}
+
+message TransactionHistoryRequest {
+    uint32 customerid = 1;
+}
+
+message Transaction {
+    uint32 id = 1;
+    uint32 customerid = 2;
+    string type = 3;
+    double amount = 4;
+    string date = 5;
+}
+
+message TransactionHistoryResponse {
+    repeated Transaction transactions = 1;
+    string message = 2;
+}

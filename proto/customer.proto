@@ -1,0 +1,46 @@
+syntax = "proto3";
+package customer;
+option go_package = "/proto";
+service CustomerService {
+    rpc Register (RegisterRequest) returns (RegisterResponse);
+    rpc Login (LoginRequest) returns (LoginResponse);
+    rpc Logout (LogoutRequest) returns (LogoutResponse);
+    rpc VerifyCustomerID (VerifyCustomerIDRequest) returns (VerifyCustomerIDResponse);
+}
+
+message RegisterRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message RegisterResponse {
+    uint32 customerid = 1;
+    string message = 2;
+}
+
+message LoginRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string token = 1;
+    string message = 2;
+}
+
+message LogoutRequest {
+    string token = 1;
+}
+
+message LogoutResponse {
+    string message = 1;
+}
+
+message VerifyCustomerIDRequest {
+    string username = 1;
+    uint32 customerid = 2;
+}
+
+message VerifyCustomerIDResponse {
+    bool valid = 1;
+}

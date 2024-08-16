@@ -1,0 +1,14 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  description: This is the API documentation for the Gateway Service.
+  title: Gateway Service API
+  version: "1.0"
+paths: {}
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
