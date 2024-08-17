@@ -34,6 +34,8 @@ Ensure you have Docker and Docker Compose installed on your machine.
 
 To build and run the services, use the provided Makefile. Navigate to the directory containing the `Makefile` and run the following commands:
 
+Be aware that these commands should be executed inside "git bash for windows" or linux terminals.
+
 1. **Build all services**:
 
     ```sh
@@ -59,19 +61,19 @@ To stop and remove all the services, use the following command:
 make clean
 
 API Documentation
-The gateway-service includes Swagger documentation for the APIs. Once the services are running, you can access the Swagger UI at:
+    The gateway-service includes Swagger documentation for the APIs. Once the services are running, you can access the Swagger UI at:
 
 http://localhost:8080/swagger/index.html
 
 Environment Variables
-The following environment variables are used in the services:
+    The following environment variables are used in the services:
 
-POSTGRES_HOST: Hostname for the PostgreSQL database.
-POSTGRES_USER: Username for the PostgreSQL database.
-POSTGRES_PASSWORD: Password for the PostgreSQL database.
-POSTGRES_DB: Database name for the PostgreSQL database.
-RABBITMQ_HOST: Hostname for RabbitMQ.
-These variables are defined in the docker-compose.yml file.
+    POSTGRES_HOST: Hostname for the PostgreSQL database.
+    POSTGRES_USER: Username for the PostgreSQL database.
+    POSTGRES_PASSWORD: Password for the PostgreSQL database.
+    POSTGRES_DB: Database name for the PostgreSQL database.
+    RABBITMQ_HOST: Hostname for RabbitMQ.
+    These variables are defined in the docker-compose.yml file.
 
 Directory Structure
 .
@@ -93,3 +95,7 @@ Directory Structure
 │   └── ...
 ├── docker-compose.yml
 └── Makefile
+
+I've created an insomnia json file, named "test_api_insomnia.json" that could be imported into Insomnia software for testing the APIs. 
+
+At the end i have to say, because i'm working on 2 other projects at the moment i didn't do any refactoring. some codes need to be moved into their own services
