@@ -1,4 +1,4 @@
-module account-service
+module github.com/m-dehghani/account-service
 
 go 1.22.4
 

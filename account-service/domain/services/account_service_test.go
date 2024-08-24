@@ -5,7 +5,8 @@ import (
 	"testing"
 	"time"
 
-	pb "account-service/proto"
+	repository "github.com/m-dehghani/account-service/domain/data"
+	pb "github.com/m-dehghani/account-service/proto"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
@@ -44,7 +45,7 @@ func TestWithdraw(t *testing.T) {
 	DB, _ := db.DB()
 	defer DB.Close()
 
-	accountService := NewAccountService(db)
+	accountService := NewAccountService(repository.NewAccountRepository(db))
 
 	mock.ExpectBegin()
 	mock.ExpectQuery(`SELECT \* FROM "accounts" WHERE customer_id = \$1 FOR UPDATE`).WithArgs(1).WillReturnRows(sqlmock.NewRows([]string{"id", "customer_id", "balance"}).AddRow(1, 1, 100.0))
@@ -70,7 +71,7 @@ func TestDeposit(t *testing.T) {
 	DB, _ := db.DB()
 	defer DB.Close()
 
-	accountService := NewAccountService(db)
+	accountService := NewAccountService(repository.NewAccountRepository(db))
 
 	mock.ExpectBegin()
 	mock.ExpectQuery(`SELECT \* FROM "accounts" WHERE customer_id = \$1 FOR UPDATE`).WithArgs(1).WillReturnRows(sqlmock.NewRows([]string{"id", "customer_id", "balance"}).AddRow(1, 1, 100.0))
@@ -92,7 +93,7 @@ func TestBalanceInquiry(t *testing.T) {
 	DB, _ := db.DB()
 	defer DB.Close()
 
-	accountService := NewAccountService(db)
+	accountService := NewAccountService(repository.NewAccountRepository(db))
 
 	mock.ExpectQuery(`SELECT \* FROM "accounts" WHERE customer_id = \$1`).WithArgs(11).WillReturnRows(sqlmock.NewRows([]string{"id", "customer_id", "balance"}).AddRow(1, 1, 100.0))
 	createAccountreq := &pb.CreateAccountRequest{Customerid: 1}
@@ -110,7 +111,7 @@ func TestTransactionHistory(t *testing.T) {
 	DB, _ := db.DB()
 	defer DB.Close()
 
-	accountService := NewAccountService(db)
+	accountService := NewAccountService(repository.NewAccountRepository(db))
 
 	mock.ExpectQuery(`SELECT \* FROM "transactions" WHERE customer_id = \$1`).WithArgs(1).WillReturnRows(sqlmock.NewRows([]string{"id", "customer_id", "type", "amount", "date"}).AddRow(1, 1, "deposit", 50.0, time.Now()).AddRow(2, 1, "withdraw", 30.0, time.Now()))
 	createAccountreq := &pb.CreateAccountRequest{Customerid: 1}

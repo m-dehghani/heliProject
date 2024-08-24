@@ -6,8 +6,10 @@ import (
 	"net"
 	"os"
 
-	pb "account-service/proto"
-	"account-service/services"
+	repository "github.com/m-dehghani/account-service/domain/data"
+	"github.com/m-dehghani/account-service/domain/entity"
+	"github.com/m-dehghani/account-service/domain/services"
+	pb "github.com/m-dehghani/account-service/proto"
 
 	"google.golang.org/grpc"
 	"gorm.io/driver/postgres"
@@ -46,9 +48,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	db.AutoMigrate(&services.Account{}, &services.Transaction{})
+	db.AutoMigrate(&entity.Account{}, &entity.Transaction{})
 
-	accountService := services.NewAccountService(db)
+	accountService := services.NewAccountService(repository.NewAccountRepository(db))
 
 	lis, err := net.Listen("tcp", ":50052")
 	if err != nil {
