@@ -96,6 +96,4 @@ Directory Structure
 ├── docker-compose.yml
 └── Makefile
 
-I've created an insomnia json file, named "test_api_insomnia.json" that could be imported into Insomnia software for testing the APIs. 
-
-At the end i have to say, because i'm working on 2 other projects at the moment i didn't do any refactoring. some codes need to be moved into their own services
+I've created an insomnia json file, named "test_api_insomnia.json" that could be imported into Insomnia software for testing the APIs.

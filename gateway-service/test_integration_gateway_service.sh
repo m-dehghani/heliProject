@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# be aware: if your OS is windows, run this file in "git bash" 
 # run chmod +x test_integration_gateway_service.sh before run this script
 # Base URL for the gateway service
 BASE_URL="http://localhost:8080"
