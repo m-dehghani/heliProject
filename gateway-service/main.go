@@ -1,12 +1,14 @@
 package main
 
 import (
-	service "gateway-service/service"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/m-dehghani/gateway-service/middleware"
+	service "github.com/m-dehghani/gateway-service/service"
+	"github.com/patrickmn/go-cache"
 	"github.com/sony/gobreaker"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -24,6 +26,8 @@ var cb = gobreaker.NewCircuitBreaker(cbSettings)
 
 // Debounce settings
 var rateLimiter = rate.NewLimiter(rate.Every(100*time.Millisecond), 1)
+
+var idempotencyCache = cache.New(5*time.Minute, 10*time.Minute)
 
 // @title Gateway Service API
 // @version 1.0
@@ -50,11 +54,11 @@ func main() {
 		service.Login(c, grpcClient, cb)
 	})
 
-	r.POST("/logout", authenticate, func(c *gin.Context) {
+	r.POST("/logout", middleware.Authenticate, func(c *gin.Context) {
 		service.Logout(c, grpcClient, cb)
 	})
 
-	r.POST("/deposit", authenticate, func(c *gin.Context) {
+	r.POST("/deposit", middleware.Authenticate, func(c *gin.Context) {
 		if !rateLimiter.Allow() {
 			c.JSON(http.StatusTooManyRequests, gin.H{"error": "too many requests"})
 			return
@@ -62,7 +66,7 @@ func main() {
 		service.Deposit(c, grpcClient, cb)
 	})
 
-	r.POST("/withdraw", authenticate, func(c *gin.Context) {
+	r.POST("/withdraw", middleware.Authenticate, middleware.Idempotency, func(c *gin.Context) {
 		if !rateLimiter.Allow() {
 			c.JSON(http.StatusTooManyRequests, gin.H{"error": "too many requests"})
 			return
@@ -70,11 +74,11 @@ func main() {
 		service.Withdraw(c, grpcClient, cb)
 	})
 
-	r.GET("/balance", authenticate, func(c *gin.Context) {
+	r.GET("/balance", middleware.Authenticate, func(c *gin.Context) {
 		service.Balance(c, grpcClient, cb)
 	})
 
-	r.GET("/transactions", authenticate, func(c *gin.Context) {
+	r.GET("/transactions", middleware.Authenticate, func(c *gin.Context) {
 		service.Transactions(c, grpcClient, cb)
 	})
 

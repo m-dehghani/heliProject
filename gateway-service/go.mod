@@ -1,4 +1,4 @@
-module gateway-service
+module github.com/m-dehghani/gateway-service
 
 go 1.22.4
 
@@ -38,6 +38,7 @@ require (
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/sony/gobreaker v1.0.0
 	github.com/stretchr/testify v1.9.0

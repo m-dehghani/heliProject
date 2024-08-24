@@ -1,4 +1,4 @@
-package main
+package middleware
 
 import (
 	"net/http"
@@ -20,7 +20,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func authenticate(c *gin.Context) {
+func Authenticate(c *gin.Context) {
 	tokenString := c.GetHeader("Authorization")
 	if tokenString == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "authorization header is required"})

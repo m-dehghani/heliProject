@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"testing"
 
-	pb "gateway-service/proto"
+	pb "github.com/m-dehghani/gateway-service/proto"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
