@@ -8,7 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/m-dehghani/gateway-service/docs"
 	"github.com/m-dehghani/gateway-service/middleware"
-	service "github.com/m-dehghani/gateway-service/service"
+	"github.com/m-dehghani/gateway-service/models/grpcclient"
+	"github.com/m-dehghani/gateway-service/models/handlers"
 	"github.com/sony/gobreaker"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -27,33 +28,36 @@ var cb = gobreaker.NewCircuitBreaker(cbSettings)
 // Debounce settings
 var rateLimiter = rate.NewLimiter(rate.Every(100*time.Millisecond), 1)
 
-// @title Gateway Service API
-// @version 1.0
-// @description This is the API documentation for the Gateway Service.
-// @host localhost:8080
-// @BasePath /
+//	@title			HeliTech APIs
+//	@version		1.0
+//	@description	These apis are just for presentation
+//	@termsOfService	http://terms.helitech.com
 
-// @securityDefinitions.apikey BearerAuth
-// @in header
-// @name Authorization
+//	@support		Heli API Support
+//	@contact.url	http://www.helitec.com
+//	@contact.email	support@helitec.com
 
+//	@license.name	MIT
+//	@license.url	https://opensource.org/licenses/MIT
+
+// @host	localhost:8080
 func main() {
 	r := gin.Default()
 
-	grpcClient := service.NewGRPCClient()
+	grpcClient := grpcclient.NewGRPCClient()
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.POST("/register", func(c *gin.Context) {
-		service.Register(c, grpcClient, cb)
+		handlers.Register(c, grpcClient, cb)
 	})
 
 	r.POST("/login", func(c *gin.Context) {
-		service.Login(c, grpcClient, cb)
+		handlers.Login(c, grpcClient, cb)
 	})
 
 	r.POST("/logout", middleware.Authenticate, func(c *gin.Context) {
-		service.Logout(c, grpcClient, cb)
+		handlers.Logout(c, grpcClient, cb)
 	})
 
 	r.POST("/deposit", middleware.Authenticate, func(c *gin.Context) {
@@ -61,7 +65,7 @@ func main() {
 			c.JSON(http.StatusTooManyRequests, gin.H{"error": "too many requests"})
 			return
 		}
-		service.Deposit(c, grpcClient, cb)
+		handlers.Deposit(c, grpcClient, cb)
 	})
 
 	r.POST("/withdraw", middleware.Authenticate, middleware.Idempotency, func(c *gin.Context) {
@@ -69,15 +73,15 @@ func main() {
 			c.JSON(http.StatusTooManyRequests, gin.H{"error": "too many requests"})
 			return
 		}
-		service.Withdraw(c, grpcClient, cb)
+		handlers.Withdraw(c, grpcClient, cb)
 	})
 
 	r.GET("/balance", middleware.Authenticate, func(c *gin.Context) {
-		service.Balance(c, grpcClient, cb)
+		handlers.Balance(c, grpcClient, cb)
 	})
 
 	r.GET("/transactions", middleware.Authenticate, func(c *gin.Context) {
-		service.Transactions(c, grpcClient, cb)
+		handlers.Transactions(c, grpcClient, cb)
 	})
 
 	r.GET("/ping", func(ctx *gin.Context) {

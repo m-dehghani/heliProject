@@ -1,14 +1,192 @@
-basePath: /
-host: localhost:8080
+definitions:
+  handlers.DepositRequest:
+    properties:
+      amount:
+        type: number
+      customer_id:
+        type: integer
+    type: object
+  handlers.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  handlers.RegisterRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  handlers.WithdrawRequest:
+    properties:
+      amount:
+        type: number
+      customer_id:
+        type: integer
+    type: object
 info:
   contact: {}
-  description: This is the API documentation for the Gateway Service.
-  title: Gateway Service API
-  version: "1.0"
-paths: {}
-securityDefinitions:
-  BearerAuth:
-    in: header
-    name: Authorization
-    type: apiKey
+paths:
+  /deposit:
+    post:
+      consumes:
+      - application/json
+      description: Deposit a specified amount into the customer's account
+      parameters:
+      - description: Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Deposit Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.DepositRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+      summary: Deposit money into account
+      tags:
+      - Account
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user with username and password
+      parameters:
+      - description: Login Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+      summary: Login a user
+      tags:
+      - Customer
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout a user by invalidating their token
+      parameters:
+      - description: Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Logout a user
+      tags:
+      - Customer
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with username and password
+      parameters:
+      - description: Register Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Register a new user
+      tags:
+      - Customer
+  /transactions:
+    get:
+      consumes:
+      - application/json
+      description: Get the transaction history of the customer's account
+      parameters:
+      - description: Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Customer ID
+        in: query
+        name: customer_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+      summary: Get transaction history
+      tags:
+      - Account
+  /withdraw:
+    post:
+      consumes:
+      - application/json
+      description: Withdraw a specified amount from the customer's account
+      parameters:
+      - description: Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Withdraw Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.WithdrawRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+      summary: Withdraw money from account
+      tags:
+      - Account
 swagger: "2.0"
