@@ -16,28 +16,28 @@ import (
 	"gorm.io/gorm"
 )
 
-type server struct {
+type Server struct {
 	accountService *services.AccountService
 }
 
 // CreateAccount implements proto.AccountServiceServer.
-func (s *server) CreateAccount(ctx context.Context, req *pb.CreateAccountRequest) (*pb.CreateAccountResponse, error) {
+func (s *Server) CreateAccount(ctx context.Context, req *pb.CreateAccountRequest) (*pb.CreateAccountResponse, error) {
 	return s.accountService.CreateAccount(ctx, req)
 }
 
-func (s *server) Withdraw(ctx context.Context, req *pb.WithdrawRequest) (*pb.WithdrawResponse, error) {
+func (s *Server) Withdraw(ctx context.Context, req *pb.WithdrawRequest) (*pb.WithdrawResponse, error) {
 	return s.accountService.Withdraw(ctx, req)
 }
 
-func (s *server) Deposit(ctx context.Context, req *pb.DepositRequest) (*pb.DepositResponse, error) {
+func (s *Server) Deposit(ctx context.Context, req *pb.DepositRequest) (*pb.DepositResponse, error) {
 	return s.accountService.Deposit(ctx, req)
 }
 
-func (s *server) BalanceInquiry(ctx context.Context, req *pb.BalanceInquiryRequest) (*pb.BalanceInquiryResponse, error) {
+func (s *Server) BalanceInquiry(ctx context.Context, req *pb.BalanceInquiryRequest) (*pb.BalanceInquiryResponse, error) {
 	return s.accountService.BalanceInquiry(ctx, req)
 }
 
-func (s *server) TransactionHistory(ctx context.Context, req *pb.TransactionHistoryRequest) (*pb.TransactionHistoryResponse, error) {
+func (s *Server) TransactionHistory(ctx context.Context, req *pb.TransactionHistoryRequest) (*pb.TransactionHistoryResponse, error) {
 	return s.accountService.TransactionHistory(ctx, req)
 }
 
@@ -58,7 +58,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterAccountServiceServer(s, &server{accountService: accountService})
+	pb.RegisterAccountServiceServer(s, &Server{accountService: accountService})
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatal(err)

@@ -24,8 +24,9 @@ func (s *AccountService) CreateAccount(ctx context.Context, req *pb.CreateAccoun
 		Balance:    0.0,
 	}
 	if err := s.repo.CreateAccount(ctx, &account); err != nil {
-		return &pb.CreateAccountResponse{Success: false, Message: "failed to create account"}, nil
+		return &pb.CreateAccountResponse{Success: false, Message: err.Error()}, nil
 	}
+
 	return &pb.CreateAccountResponse{Success: true, Message: "account created successfully"}, nil
 }
 

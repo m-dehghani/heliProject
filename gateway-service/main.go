@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/m-dehghani/gateway-service/docs"
 	"github.com/m-dehghani/gateway-service/middleware"
 	service "github.com/m-dehghani/gateway-service/service"
-	"github.com/patrickmn/go-cache"
 	"github.com/sony/gobreaker"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -26,8 +26,6 @@ var cb = gobreaker.NewCircuitBreaker(cbSettings)
 
 // Debounce settings
 var rateLimiter = rate.NewLimiter(rate.Every(100*time.Millisecond), 1)
-
-var idempotencyCache = cache.New(5*time.Minute, 10*time.Minute)
 
 // @title Gateway Service API
 // @version 1.0

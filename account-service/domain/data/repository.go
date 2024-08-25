@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/m-dehghani/account-service/domain/entity"
-
 	"gorm.io/gorm"
 )
 
@@ -15,6 +14,8 @@ type AccountRepository interface {
 	CreateTransaction(ctx context.Context, transaction *entity.Transaction) error
 	GetTransactionsByCustomerID(ctx context.Context, customerID uint) ([]entity.Transaction, error)
 	Begin() *gorm.DB
+	Commit() error
+	Rollback() error
 }
 
 type accountRepository struct {
@@ -31,7 +32,7 @@ func (r *accountRepository) CreateAccount(ctx context.Context, account *entity.A
 
 func (r *accountRepository) GetAccountByCustomerID(ctx context.Context, customerID uint) (*entity.Account, error) {
 	var account entity.Account
-	err := r.db.Where("customer_id = ?", customerID).First(&account).Error
+	err := r.db.Where("Customer_ID = ?", customerID).First(&account).Error
 	return &account, err
 }
 
@@ -51,4 +52,12 @@ func (r *accountRepository) GetTransactionsByCustomerID(ctx context.Context, cus
 
 func (r *accountRepository) Begin() *gorm.DB {
 	return r.db.Begin()
+}
+
+func (r *accountRepository) Commit() error {
+	return r.db.Commit().Error
+}
+
+func (r *accountRepository) Rollback() error {
+	return r.db.Rollback().Error
 }
