@@ -7,16 +7,16 @@ BASE_URL="http://localhost:8080"
 # Register a new user
 echo "Registering a new user..."
 curl -X POST "$BASE_URL/register" -H "Content-Type: application/json" -d '{
-  "username": "testuser",
-  "password": "testpass"
+  "username": "testuser1",
+  "password": "testpass1"
 }'
 echo -e "\n"
 
 # Login the user
 echo "Logging in the user..."
 LOGIN_RESPONSE=$(curl -s -X POST "$BASE_URL/login" -H "Content-Type: application/json" -d '{
-  "username": "testuser",
-  "password": "testpass"
+  "username": "testuser1",
+  "password": "testpass1"
 }')
 TOKEN=$(echo $LOGIN_RESPONSE | jq -r '.token')
 echo "Token: $TOKEN"

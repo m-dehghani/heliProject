@@ -22,16 +22,16 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-// @Summary Register a new user
-// @Description Register a new user with username and password
-// @Tags Customer
-// @Accept json
-// @Produce json
-// @Param request body RegisterRequest true "Register Request"
-// @Success 200
-// @Failure 400
-// @Failure 500
-// @Router /register [post]
+// @Summary		Register a new user
+// @Description	Register a new user with username and password
+// @Tags			Customer
+// @Accept			json
+// @Produce		json
+// @Param			request	body	RegisterRequest	true	"Register Request"
+// @Success		200
+// @Failure		400
+// @Failure		500
+// @Router			/register [post]
 func Register(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.CircuitBreaker) {
 	var req RegisterRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -64,16 +64,16 @@ func Register(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.C
 	c.JSON(http.StatusOK, gin.H{"message": grpcRes.(*pb.RegisterResponse).Message, "customer-id": grpcRes.(*pb.RegisterResponse).Customerid})
 }
 
-// @Summary Login a user
-// @Description Login a user with username and password
-// @Tags Customer
-// @Accept json
-// @Produce json
-// @Param request body LoginRequest true "Login Request"
-// @Success 200
-// @Failure 400
-// @Failure 401
-// @Router /login [post]
+// @Summary		Login a user
+// @Description	Login a user with username and password
+// @Tags			Customer
+// @Accept			json
+// @Produce		json
+// @Param			request	body	LoginRequest	true	"Login Request"
+// @Success		200
+// @Failure		400
+// @Failure		401
+// @Router			/login [post]
 func Login(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.CircuitBreaker) {
 	var req LoginRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -97,15 +97,15 @@ func Login(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.Circ
 	c.JSON(http.StatusOK, gin.H{"token": grpcRes.(*pb.LoginResponse).Token, "message": grpcRes.(*pb.LoginResponse).Message})
 }
 
-// @Summary Logout a user
-// @Description Logout a user by invalidating their token
-// @Tags Customer
-// @Accept json
-// @Produce json
-// @Param Authorization header string true "Token"
-// @Success 200
-// @Failure 500
-// @Router /logout [post]
+// @Summary		Logout a user
+// @Description	Logout a user by invalidating their token
+// @Tags			Customer
+// @Accept			json
+// @Produce		json
+// @Param			Authorization	header	string	true	"Token"
+// @Success		200
+// @Failure		500
+// @Router			/logout [post]
 func Logout(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.CircuitBreaker) {
 	token := c.GetHeader("Authorization")
 

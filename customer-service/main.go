@@ -13,7 +13,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	pb "customer-service/proto"
+	pb "github.com/m-dehghani/customer-service/proto"
 )
 
 var jwtKey = []byte("your_secret_key")

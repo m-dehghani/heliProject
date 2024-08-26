@@ -1,4 +1,4 @@
-module customer-service
+module github.com/m-dehghani/customer-service
 
 go 1.22.4
 

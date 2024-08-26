@@ -33,18 +33,18 @@ type WithdrawRequest struct {
 	Amount     float64 `json:"amount"`
 }
 
-// @Summary Deposit money into account
-// @Description Deposit a specified amount into the customer's account
-// @Tags Account
-// @Accept json
-// @Produce json
-// @Param Authorization header string true "Token"
-// @Param request body DepositRequest true "Deposit Request"
-// @Success 200
-// @Failure 400
-// @Failure 401
-// @Failure 500
-// @Router /deposit [post]
+// @Summary		Deposit money into account
+// @Description	Deposit a specified amount into the customer's account
+// @Tags			Account
+// @Accept			json
+// @Produce		json
+// @Param			Authorization	header	string			true	"Token"
+// @Param			request			body	DepositRequest	true	"Deposit Request"
+// @Success		200
+// @Failure		400
+// @Failure		401
+// @Failure		500
+// @Router			/deposit [post]
 func Deposit(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.CircuitBreaker) {
 	var req DepositRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -86,18 +86,18 @@ func Deposit(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.Ci
 	})
 }
 
-// @Summary Withdraw money from account
-// @Description Withdraw a specified amount from the customer's account
-// @Tags Account
-// @Accept json
-// @Param Authorization header string true "Token"
-// @Produce json
-// @Param request body WithdrawRequest true "Withdraw Request"
-// @Success 200
-// @Failure 400
-// @Failure 401
-// @Failure 500
-// @Router /withdraw [post]
+// @Summary		Withdraw money from account
+// @Description	Withdraw a specified amount from the customer's account
+// @Tags			Account
+// @Accept			json
+// @Param			Authorization	header	string	true	"Token"
+// @Produce		json
+// @Param			request	body	WithdrawRequest	true	"Withdraw Request"
+// @Success		200
+// @Failure		400
+// @Failure		401
+// @Failure		500
+// @Router			/withdraw [post]
 func Withdraw(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.CircuitBreaker) {
 	var req WithdrawRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -138,17 +138,17 @@ func Withdraw(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.C
 	})
 }
 
-// @Summary Get account balance
-// @Description Get the balance of the customer's account
-// @Tags Account
-// @Accept json
-// @Produce json
-// @Param Authorization header string true "Token"
-// @Param customer_id query uint32 true "Customer ID"
-// @Success 200
-// @Failure 401
-// @Failure 500
-// @Router /balance [get]
+//	@Summary		Get account balance
+//	@Description	Get the balance of the customer's account
+//	@Tags			Account
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header	string	true	"Token"
+//	@Param			customer_id		query	uint32	true	"Customer ID"
+//	@Success		200
+//	@Failure		401
+//	@Failure		500
+//	@Router			/balance [get]
 
 func Balance(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.CircuitBreaker) {
 	customerID, err := strconv.ParseUint(c.Query("customer_id"), 10, 32)
@@ -189,17 +189,17 @@ func Balance(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.Ci
 	})
 }
 
-// @Summary Get transaction history
-// @Param Authorization header string true "Token"
-// @Description Get the transaction history of the customer's account
-// @Tags Account
-// @Accept json
-// @Produce json
-// @Param customer_id query uint32 true "Customer ID"
-// @Success 200
-// @Failure 401
-// @Failure 500
-// @Router /transactions [get]
+// @Summary		Get transaction history
+// @Param			Authorization	header	string	true	"Token"
+// @Description	Get the transaction history of the customer's account
+// @Tags			Account
+// @Accept			json
+// @Produce		json
+// @Param			customer_id	query	uint32	true	"Customer ID"
+// @Success		200
+// @Failure		401
+// @Failure		500
+// @Router			/transactions [get]
 func Transactions(c *gin.Context, grpcClient *grpcclient.GRPCClient, cb *gobreaker.CircuitBreaker) {
 	customerID, err := strconv.ParseUint(c.Query("customer_id"), 10, 32)
 	if err != nil {

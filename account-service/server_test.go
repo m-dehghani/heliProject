@@ -31,7 +31,7 @@ func TestCreateAccount(t *testing.T) {
 		t.Fatalf("CreateAccount failed: %v", err)
 	}
 
-	if resp.Success != true {
+	if !resp.Success {
 		t.Errorf("Error in account creation")
 	}
 
